@@ -1,6 +1,0 @@
-{
-  "mongoURI": "mongodb+srv://brandonbowenbiz:brandonbowenbiz@devconnector.qvks4zj.mongodb.net/test",
-  "jwtSecret": "mysecrettoken",
-  "githubClientId": "1ae810f153b36e0c9c5f",
-  "githubSecret": "f94c866079dccfb8ea0b538e8592743af5230e30"
-}
