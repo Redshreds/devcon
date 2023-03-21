@@ -4,7 +4,6 @@ const { check, validationResult } = require('express-validator');
 const auth = require('../../middleware/auth');
 
 const Post = require('../../models/Post');
-const Profile = require('../../models/Profile');
 const User = require('../../models/User');
 
 // @route    POST api/posts
@@ -59,16 +58,15 @@ router.get('/:id', auth, async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
 
-    if (!post) {
+    // Check for ObjectId format and post
+    if (!req.params.id.match(/^[0-9a-fA-F]{24}$/) || !post) {
       return res.status(404).json({ msg: 'Post not found' });
     }
 
     res.json(post);
   } catch (err) {
     console.error(err.message);
-    if (err.kind === 'ObjectId') {
-      return res.status(404).json({ msg: 'Post not found' });
-    }
+
     res.status(500).send('Server Error');
   }
 });
@@ -80,7 +78,8 @@ router.delete('/:id', auth, async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
 
-    if (!post) {
+    // Check for ObjectId format and post
+    if (!req.params.id.match(/^[0-9a-fA-F]{24}$/) || !post) {
       return res.status(404).json({ msg: 'Post not found' });
     }
 
@@ -94,9 +93,7 @@ router.delete('/:id', auth, async (req, res) => {
     res.json({ msg: 'Post removed' });
   } catch (err) {
     console.error(err.message);
-    if (err.kind === 'ObjectId') {
-      return res.status(404).json({ msg: 'Post not found' });
-    }
+
     res.status(500).send('Server Error');
   }
 });
@@ -128,7 +125,7 @@ router.put('/like/:id', auth, async (req, res) => {
 });
 
 // @route    PUT api/posts/unlike/:id
-// @desc     Like a post
+// @desc     Unlike a post
 // @access   Private
 router.put('/unlike/:id', auth, async (req, res) => {
   try {
@@ -204,30 +201,25 @@ router.delete('/comment/:id/:comment_id', auth, async (req, res) => {
     const comment = post.comments.find(
       (comment) => comment.id === req.params.comment_id
     );
-
     // Make sure comment exists
     if (!comment) {
       return res.status(404).json({ msg: 'Comment does not exist' });
     }
-
     // Check user
     if (comment.user.toString() !== req.user.id) {
       return res.status(401).json({ msg: 'User not authorized' });
     }
 
-    // Get remove index
-    const removeIndex = post.comments
-      .map((comment) => comment.id)
-      .indexOf(req.params.comment_id);
-
-    post.comments.splice(removeIndex, 1);
+    post.comments = post.comments.filter(
+      ({ id }) => id !== req.params.comment_id
+    );
 
     await post.save();
 
-    res.json(post.comments);
+    return res.json(post.comments);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server Error');
+    return res.status(500).send('Server Error');
   }
 });
 
