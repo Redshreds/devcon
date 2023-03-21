@@ -77,13 +77,12 @@ router.post(
     }
 
     // Build social object and add to profileFields
-    const socialfields = { youtube, twitter, instagram, linkedin, facebook };
-
-    for (const [key, value] of Object.entries(socialfields)) {
-      if (value.length > 0)
-        socialfields[key] = normalize(value, { forceHttps: true });
-    }
-    profileFields.social = socialfields;
+    profileFields.social = {};
+    if (youtube) profileFields.social.youtube = youtube;
+    if (twitter) profileFields.social.twitter = twitter;
+    if (facebook) profileFields.social.facebook = facebook;
+    if (linkedin) profileFields.social.linkedin = linkedin;
+    if (instagram) profileFields.social.instagram = instagram;
 
     try {
       // Using upsert option (creates new doc if no match is found):

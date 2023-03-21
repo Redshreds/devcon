@@ -5,22 +5,26 @@ import { deleteExperience } from '../../actions/profile';
 import formatDate from '../../utils/formatDate';
 
 const Experience = ({ experience, deleteExperience }) => {
-  const experiences = experience.map((exp) => (
-    <tr key={exp._id}>
-      <td>{exp.company}</td>
-      <td className='hide-sm'>{exp.title}</td>
-      <td>
-        {formatDate(exp.from)} - {exp.to ? formatDate(exp.to) : 'Now'}
-      </td>
-      <td>
-        <button
-          onClick={() => deleteExperience(exp._id)}
-          className='btn btn-danger'>
-          Delete
-        </button>
-      </td>
-    </tr>
-  ));
+  let experiences = [];
+
+  if (experience && experience.length > 0) {
+    experiences = experience.map((exp) => (
+      <tr key={exp._id}>
+        <td>{exp.company}</td>
+        <td className='hide-sm'>{exp.title}</td>
+        <td>
+          {formatDate(exp.from)} - {exp.to ? formatDate(exp.to) : 'Now'}
+        </td>
+        <td>
+          <button
+            onClick={() => deleteExperience(exp._id)}
+            className='btn btn-danger'>
+            Delete
+          </button>
+        </td>
+      </tr>
+    ));
+  }
 
   return (
     <Fragment>
@@ -41,7 +45,7 @@ const Experience = ({ experience, deleteExperience }) => {
 };
 
 Experience.propTypes = {
-  experience: PropTypes.array.isRequired,
+  experience: PropTypes.array,
   deleteExperience: PropTypes.func.isRequired,
 };
 
