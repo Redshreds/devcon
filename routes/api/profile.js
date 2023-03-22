@@ -1,11 +1,11 @@
 const express = require('express');
 const axios = require('axios');
-const PRODUCTION_CONFIG = require('PRODUCTION_CONFIG');
+const { productionConfig } = require('../../config/config');
 const router = express.Router();
 const auth = require('../../middleware/auth');
 const { check, validationResult } = require('express-validator');
 // bring in normalize to give us a proper url, regardless of what user entered
-
+const githubToken = productionConfig.get('githubToken');
 const Profile = require('../../models/Profile');
 const User = require('../../models/User');
 const Post = require('../../models/Post');
@@ -301,7 +301,7 @@ router.get('/github/:username', async (req, res) => {
     );
     const headers = {
       'user-agent': 'node.js',
-      Authorization: `token ${PRODUCTION_CONFIG.get('githubToken')}`,
+      Authorization: `token ${githubToken}`,
     };
 
     const gitHubResponse = await axios.get(uri, { headers });

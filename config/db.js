@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
-const PRODUCTION_CONFIG = require('PRODUCTION_CONFIG');
-const db = PRODUCTION_CONFIG.get('mongoURI');
+const { productionConfig } = require('./config');
+
+const db = productionConfig.mongoURI;
 
 const connectDB = async () => {
   try {
@@ -8,7 +9,7 @@ const connectDB = async () => {
     console.log('MongoDB Connected');
   } catch (err) {
     console.error(err.message);
-    //Exit process with failure
+    // Exit process with failure
     process.exit(1);
   }
 };

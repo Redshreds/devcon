@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
-const PRODUCTION_CONFIG = require('PRODUCTION_CONFIG');
+const { productionConfig } = require('../config/config');
+const jwtSecret = productionConfig.get('jwtSecret');
 
 module.exports = function (req, res, next) {
   // Get token from header
@@ -12,7 +13,7 @@ module.exports = function (req, res, next) {
 
   // Verify token
   try {
-    jwt.verify(token, PRODUCTION_CONFIG.get('jwtSecret'), (error, decoded) => {
+    jwt.verify(token, jwtSecret, (error, decoded) => {
       if (error) {
         return res.status(401).json({ msg: 'Token is not valid' });
       } else {
