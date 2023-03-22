@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
-const { productionConfig } = require('./config');
-
-const db = productionConfig.mongoURI;
+const config = require('config');
+const db = config.get('mongoURI');
 
 const connectDB = async () => {
   try {
