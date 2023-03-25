@@ -9,9 +9,4 @@ export default defineConfig({
       '/api': 'http://localhost:5000',
     },
   },
-  build: {
-    rollupOptions: {
-      external: ['prop-types'],
-    },
-  },
 });
