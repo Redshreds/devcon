@@ -8,7 +8,7 @@
     "server": "nodemon server",
     "client": "npm run dev --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "build": "npm install && cd client && npm install && vite build && cd .."
+    "build": "npm install && cd client && npm install && npm run build && cd .."
   },
   "author": "Brandon Bowen",
   "license": "MIT",
