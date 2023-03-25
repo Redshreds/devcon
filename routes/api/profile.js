@@ -1,6 +1,6 @@
 const express = require('express');
 const axios = require('axios');
-const config = require('config');
+// const config = require('config');
 const router = express.Router();
 const auth = require('../../middleware/auth');
 const { check, validationResult } = require('express-validator');
@@ -8,6 +8,7 @@ const { check, validationResult } = require('express-validator');
 const Profile = require('../../models/Profile');
 const User = require('../../models/User');
 const Post = require('../../models/Post');
+require('dotenv').config();
 
 // @route    GET api/profile/me
 // @desc     Get current users profile
@@ -300,7 +301,7 @@ router.get('/github/:username', async (req, res) => {
     );
     const headers = {
       'user-agent': 'node.js',
-      Authorization: `token ${config.get('githubToken')}`,
+      Authorization: `token ${process.env.GITHUB_TOKEN}`,
     };
 
     const gitHubResponse = await axios.get(uri, { headers });
